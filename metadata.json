@@ -1,0 +1,8 @@
+{
+  "name": "TripPilot",
+  "description": "AI-powered multimodal travel planning platform with real-time plan refinement, cost and comfort comparisons, and verified official provider booking handoff.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
