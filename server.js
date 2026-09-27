@@ -4,11 +4,13 @@
  */
 
 import dotenv from 'dotenv';
-dotenv.config({ override: true });
+// Load environment variables without overriding host-assigned environment variables (e.g. Render PORT)
+dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -579,10 +581,33 @@ async function startServer() {
   // ==========================================
   // Vite Integration & Static Frontend Serving
   // ==========================================
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
+  const distDir = path.resolve(__dirname, 'dist');
+  const distIndex = path.resolve(distDir, 'index.html');
+  let hasDist = fs.existsSync(distIndex);
+
+  // If in production mode but dist was not pre-built during deployment
+  if (process.env.NODE_ENV === 'production' && !hasDist) {
+    console.log('[TripPilot Server] Production dist/index.html not found, generating build with Vite...');
+    try {
+      const { build: viteBuild } = await import('vite');
+      await viteBuild();
+      hasDist = fs.existsSync(distIndex);
+      if (hasDist) {
+        console.log('[TripPilot Server] Vite build completed successfully.');
+      }
+    } catch (buildErr) {
+      console.warn('[TripPilot Server] Automatic Vite build failed, falling back to Vite middleware:', buildErr?.message || buildErr);
+    }
+  }
+
+  if (hasDist) {
+    app.use(express.static(distDir));
     app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+      res.sendFile(distIndex, (err) => {
+        if (err && !res.headersSent) {
+          res.status(500).send('Error loading page. Please refresh or verify frontend build.');
+        }
+      });
     });
   } else {
     const vite = await createViteServer({

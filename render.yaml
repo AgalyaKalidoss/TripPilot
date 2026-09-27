@@ -1,19 +1,17 @@
 services:
-  # Python Flask Backend Web Service
+  # Node.js Express & Vite Production Web Service
   - type: web
-    name: trippilot-ai-backend
-    runtime: python
-    region: oregon
+    name: trippilot
+    runtime: node
     plan: free
-    buildCommand: "pip install -r backend/requirements.txt"
-    startCommand: "gunicorn backend.app:app --bind 0.0.0.0:$PORT"
+    region: oregon
+    buildCommand: "npm install && npm run build"
+    startCommand: "node server.js"
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.12
-      - key: FLASK_ENV
+      - key: NODE_ENV
         value: production
       - key: PORT
-        value: 5000
+        value: 10000
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
@@ -21,20 +19,4 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: FRONTEND_URL
-        sync: false
-
-  # React / Vite Frontend Static Site
-  - type: web
-    name: trippilot-ai-frontend
-    runtime: static
-    region: oregon
-    plan: free
-    buildCommand: "npm install && npm run build"
-    staticPublishPath: "./dist"
-    routes:
-      - type: rewrite
-        source: "/*"
-        destination: "/index.html"
-    envVars:
-      - key: VITE_API_URL
         sync: false
