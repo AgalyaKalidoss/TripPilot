@@ -38,10 +38,10 @@ export const AuthModal = () => {
   };
 
   const fillDemoAccount = () => {
-    setEmail('agalyakalidoss02@gmail.com');
+    setEmail('abc@gmail.com');
     setPassword('student1234');
     if (mode === 'register') {
-      setName('Agalya Kalidoss');
+      setName('ABC');
     }
   };
 
