@@ -86,18 +86,4 @@ curl http://localhost:3000/api/health
 
 ---
 
-## 6. Render Deployment Steps
 
-1. Create a new **Web Service** on [Render.com](https://render.com).
-2. Connect your Git repository.
-3. Configure the service settings:
-   - **Environment**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `node server.js`
-4. In the **Environment Variables** section on Render, add:
-   - `MONGODB_URI`: Your MongoDB Atlas connection string.
-   - `JWT_SECRET`: A secure random secret string.
-   - `GEMINI_API_KEY`: Your Google AI Studio API key.
-   - `NODE_ENV`: `production`
-5. Click **Deploy**.
-6. Verify deployment by visiting `https://<your-render-app>.onrender.com/api/health`.
