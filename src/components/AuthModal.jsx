@@ -118,7 +118,7 @@ export const AuthModal = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Agalya Kalidoss"
+                  placeholder="e.g. your name"
                   className="w-full rounded-xl border border-neutral-300 bg-white pl-10 pr-3.5 py-2.5 text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 />
               </div>
